@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="columns is-centered mt-6">
+  <div class="column is-one-quarter" th:if="${success != null}">
+    <article class="message is-success">
+      <div class="message-body">
+        <p>Office added successfully</p>
+        <a href="/offices">Go back</a>
+      </div>
+    </article>
+  </div>
+  <div class="column is-one-quarter" th:if="${success == null}">
+    <div class="card">
+      <div class="card-content">
+        <h1 class="title">New office</h1>
+        <form name="register" th:object="${office}" th:action="@{/offices/new}" method="post">
+          <div class="field">
+            <label for="name" class="label">Name (alias)</label>
+            <input class="input is-medium" id="name" type="text" name="name" th:field="*{name}" placeholder="Internal name">
+          </div>
+
+          <div class="field">
+            <label class="label" for="address">Address</label>
+            <div class="control">
+              <textarea id="address" class="textarea" placeholder="Textarea" th:field="*{address}"></textarea>
+            </div>
+          </div>
+
+
+          <div class="field is-grouped">
+            <div class="control">
+              <button type="submit" class="button is-success">Add</button>
+            </div>
+            <div class="control">
+              <a href="/offices" class="button is-link is-light">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

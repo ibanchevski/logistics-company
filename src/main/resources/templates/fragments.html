@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:fragment="head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Logistics Company</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bulma.min.css}">
+
+  <script>
+    // Select current menu link
+    window.onload = function() {
+      const url = window.location.href;
+      const pathSegments = url.split("/").filter(seg => seg.length !== 0);
+      const lastSegment = pathSegments[2];
+
+      if (lastSegment) {
+        const navElement = Array.from(document.querySelectorAll('.navbar-start a')).filter(el => el.innerText.toLowerCase() === lastSegment);
+        navElement[0]?.classList.add('is-active');
+      }
+    }
+  </script>
+</head>
+<body>
+<header th:fragment="header">
+  <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item">Logistics Company</a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <a href="/home" class="navbar-item">
+          Home
+        </a>
+
+        <a class="navbar-item">
+          Company
+        </a>
+
+        <a href="/offices" class="navbar-item">
+          Offices
+        </a>
+
+        <a href="/employees" class="navbar-item">
+          Employees
+        </a>
+
+        <a class="navbar-item">
+          Clients
+        </a>
+
+        <a href="/parcels" class="navbar-item">
+          Parcels
+        </a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          Hello,
+          &nbsp;
+          <span th:text="${name}"></span>
+          &nbsp;&nbsp;
+          <div class="buttons">
+            <a class="button is-light" href="/logout">
+              Log out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<footer th:fragment="footer">
+  <p>Ivaylo Banchevski</p>
+</footer>
+
+</body>
+</html>

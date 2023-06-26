@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+    <div class="columns is-centered mt-6">
+        <div class="column is-one-quarter ">
+            <div class="card">
+                <div class="card-content">
+                    <h1 class="title">Login</h1>
+                    <div th:if="${param.error}">
+                        <div class="message is-danger mb-3">
+                            <div class="message-body">
+                                Invalid username or password
+                            </div>
+                        </div>
+                    </div>
+                    <form name="login" th:action="@{/login}" method="post">
+                        <div class="field">
+                            <label class="label " for="username">Username</label>
+                            <input class="input" id="username" type="text" name="username" placeholder="Username">
+                        </div>
+
+                        <div class="field">
+                            <label for="password" class="label">Password</label>
+                            <input class="input" id="password" type="password" name="password" placeholder="Password">
+                        </div>
+
+                        <button type="submit" class="button is-success is-light is-medium mb-5">Login</button>
+                    </form>
+                    <a href="/register" class="is-link is-bold mt-5">Register</a>
+                    <a href="/employees/activate" class="is-link is-bold mt-5">Employee activate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

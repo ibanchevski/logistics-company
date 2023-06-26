@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<div class="columns is-centered mt-6">
+    <div class="column is-one-quarter ">
+        <div class="card">
+            <div class="card-content">
+                <h1 class="title">Employee activation</h1>
+                <div th:if="${error != null}">
+                    <div class="message is-danger mb-3">
+                        <div class="message-body" th:text="${error}">
+
+                        </div>
+                    </div>
+                </div>
+                <form name="login" th:action="@{/employees/activate}" method="post">
+                    <div class="field">
+                        <label class="label " for="username">Username</label>
+                        <input class="input" id="username" type="text" name="username" placeholder="Username" required>
+                    </div>
+
+                    <button type="submit" class="button is-success is-light is-medium is-fullwidth mb-5">Next</button>
+                </form>
+                <a href="/login" class="is-link is-bold mt-5">Go back</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

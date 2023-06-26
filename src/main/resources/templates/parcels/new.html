@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+    <div class="columns is-centered">
+        <div class="column is-two-fifths my-5">
+            <div class="card">
+                <div class="card-content">
+                    <div class="title">New parcel</div>
+                    <form name="newParcel" th:object="${parcel}" th:action="@{/parcels/new}" method="post">
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="senderSearch" class="label">Sender</label>
+                            </div>
+                            <div class="field-body">
+                                <article class="panel is-white" id="senderSearchPanel">
+                                    <div class="panel-block">
+                                        <input id="sender" type="text" name="senderUsername" th:field="*{senderUsername}" hidden />
+                                        <input id="senderSearch" class="input" type="text" placeholder="Search" onkeyup="searchUser('senderSearchPanel', this)" autocomplete="off" />
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="receiverSearch" class="label">Receiver</label>
+                            </div>
+                            <div class="field-body">
+                                <article class="panel is-white" id="receiverSearchPanel">
+                                    <div class="panel-block">
+                                        <input id="receiver" type="text" name="receiverUsername" th:field="*{receiverUsername}" hidden />
+                                        <input id="receiverSearch" class="input" type="text" placeholder="Search" onkeyup="searchUser('receiverSearchPanel', this)" autocomplete="off" />
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="description" class="label">Details</label>
+                            </div>
+                            <div class="field-body">
+                                <textarea id="description" class="textarea" placeholder="Parcel details" th:field="*{description}"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="officeSend" class="label">Office</label>
+                            </div>
+                            <div class="field-body">
+                                <input id="officeSend" type="text" th:field="*{officeSend}" th:value="${employeeOffice.getId()}" hidden disabled>
+                                <input type="text" class="input" th:value="${employeeOffice.getName()}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="weight" class="label">Weight</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field is-expanded">
+                                    <div class="field has-addons">
+                                        <p class="control">
+                                            <a class="button is-static">
+                                                KG
+                                            </a>
+                                        </p>
+                                        <p class="control is-expanded">
+                                            <input type="number" class="input" id="weight" min="0">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="officeReceive" class="label">Office (Receive)</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="select">
+                                        <select id="officeReceive" th:field="*{officeReceive}">
+                                            <option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.getName()}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="checkbox">
+                                        <input type="checkbox" onclick="useOtherAddress()">
+                                        Other address
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal is-hidden" id="otherAddressWrapper">
+                            <div class="field-label"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <textarea class="textarea" placeholder="Custom address"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="field is-horizontal">
+                            <div class="field-label"></div>
+                            <div class="field-body">
+                                <button type="submit" class="button is-success is-light">Send</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <p class="card-footer-item has-text-info-dark">
+                        Total:
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+<footer th:replace="~{fragments :: footer}"></footer>
+
+<script>
+    const senderSearch = document.querySelector('#senderSearch');
+    const DEBOUNCE_TIME_MS = 500;
+    let debTimer = undefined;
+    let isUseOtherAddress = false;
+
+    function searchUser(searchPanelId, ctx) {
+        if (debTimer) {
+            clearTimeout(debTimer);
+        }
+        debTimer = setTimeout(() => {
+            console.log(senderSearch.value);
+            if (ctx.value) {
+                fetch(`/api/users?searchTerm=${ctx.value}`)
+                    .then(resp => resp.json())
+                    .then(res => populateSearchResults(res, searchPanelId, ctx));
+            } else {
+                document.querySelectorAll(`#${searchPanelId}.panel a`).forEach(e => e.remove());
+            }
+        }, DEBOUNCE_TIME_MS);
+    }
+
+    function populateSearchResults(searchResArr, searchPanelId, ctx) {
+        console.log(searchResArr, searchPanelId);
+        const wrapperPanel = document.getElementById(searchPanelId);
+        const range = document.createRange();
+        document.querySelectorAll(`#${searchPanelId}.panel a`).forEach(e => e.remove());
+        searchResArr.forEach(user => {
+            const template = `
+            <a class="panel-block" id="${user.username}">
+                ${user.name}
+            </a>
+            `;
+            wrapperPanel.append(range.createContextualFragment(template));
+        });
+
+        const dropdownOptions = document.querySelectorAll(`#${searchPanelId}.panel a`);
+        dropdownOptions.forEach(linkEl => {
+            linkEl.addEventListener('click', evt => {
+                Array.from(dropdownOptions).filter(o => o !== evt.target).forEach(e => e.classList.remove('is-active', 'has-background-grey-lighter'));
+                evt.target.classList.add('is-active', 'has-background-grey-lighter');
+                document.getElementById(ctx.previousElementSibling.id).setAttribute('th:value', evt.target.text);
+            });
+        })
+    }
+
+    function useOtherAddress() {
+        isUseOtherAddress = !isUseOtherAddress;
+        const otherAddressWrapper = document.querySelector('#otherAddressWrapper');
+        const officeReceiveSelect = document.querySelector('#officeReceive');
+        if (isUseOtherAddress) {
+            otherAddressWrapper.classList.remove('is-hidden');
+            officeReceiveSelect.parentElement.classList.add('is-disabled');
+            officeReceiveSelect.setAttribute("disabled", "true");
+        } else {
+            otherAddressWrapper.classList.add('is-hidden');
+            officeReceiveSelect.parentElement.classList.remove('is-disabled');
+            officeReceiveSelect.removeAttribute("disabled");
+        }
+    }
+</script>
+
+</body>
+</html>
