@@ -11,4 +11,6 @@ public interface UserService extends UserDetailsService {
     UserEntity addNewEmployee(AddEmployeeDTO employeeDTO);
 
     List<UserEntity> searchUsers(String searchTerm);
+
+    UserEntity findByUsername(String username);
 }

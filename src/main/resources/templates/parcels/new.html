@@ -52,8 +52,15 @@
                                 <label for="officeSend" class="label">Office</label>
                             </div>
                             <div class="field-body">
-                                <input id="officeSend" type="text" th:field="*{officeSend}" th:value="${employeeOffice.getId()}" hidden disabled>
-                                <input type="text" class="input" th:value="${employeeOffice.getName()}" disabled>
+                                <input type="text" name="officeSendId" th:value="${employeeOffice.getId()}" />
+                                <input type="text" th:attr="value=${employeeOffice.getName()}" disabled>
+<!--                                <input type="text" id="officeSend" name="officeSend" th:attr="value=${employeeOffice}">-->
+<!--                                <input type="text" th:attr="value=${employeeOffice.getName()}">-->
+<!--                                <div class="select is-disabled">-->
+<!--                                    <select id="officeSend" name="officeSend" disabled>-->
+<!--                                        <option th:value="${employeeOffice}" th:text="${employeeOffice.getName()}"></option>-->
+<!--                                    </select>-->
+<!--                                </div>-->
                             </div>
                         </div>
 
@@ -84,14 +91,14 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="select">
-                                        <select id="officeReceive" th:field="*{officeReceive}">
+                                        <select id="officeReceive" th:field="*{officeReceiveId}">
                                             <option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.getName()}"></option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="field">
                                     <label class="checkbox">
-                                        <input type="checkbox" onclick="useOtherAddress()">
+                                        <input type="checkbox" name="isOffice" onclick="useOtherAddress()">
                                         Other address
                                     </label>
                                 </div>
@@ -127,7 +134,6 @@
 <footer th:replace="~{fragments :: footer}"></footer>
 
 <script>
-    const senderSearch = document.querySelector('#senderSearch');
     const DEBOUNCE_TIME_MS = 500;
     let debTimer = undefined;
     let isUseOtherAddress = false;
@@ -137,7 +143,6 @@
             clearTimeout(debTimer);
         }
         debTimer = setTimeout(() => {
-            console.log(senderSearch.value);
             if (ctx.value) {
                 fetch(`/api/users?searchTerm=${ctx.value}`)
                     .then(resp => resp.json())
@@ -167,7 +172,7 @@
             linkEl.addEventListener('click', evt => {
                 Array.from(dropdownOptions).filter(o => o !== evt.target).forEach(e => e.classList.remove('is-active', 'has-background-grey-lighter'));
                 evt.target.classList.add('is-active', 'has-background-grey-lighter');
-                document.getElementById(ctx.previousElementSibling.id).setAttribute('th:value', evt.target.text);
+                document.getElementById(ctx.previousElementSibling.id).setAttribute('value', evt.target.id);
             });
         })
     }

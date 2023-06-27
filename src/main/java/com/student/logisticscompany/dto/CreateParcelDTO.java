@@ -11,6 +11,9 @@ public class CreateParcelDTO {
     private String description;
     private String senderUsername;
     private String receiverUsername;
-    private String officeSend;
-    private String officeReceive;
+    private long officeSendId;
+    private long officeReceiveId;
+    private long employeeId;
+    private String address;
+    private boolean isOffice;
 }

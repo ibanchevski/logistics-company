@@ -17,11 +17,11 @@ public class ParcelEntity extends BaseEntity {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id", nullable = false)
+    @JoinColumn(name = "sender_username", nullable = false)
     private UserEntity sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", nullable = false)
+    @JoinColumn(name = "receiver_username", nullable = false)
     private UserEntity receiver;
 
     @Column(name = "address")
@@ -35,4 +35,19 @@ public class ParcelEntity extends BaseEntity {
 
     @Column(name = "is_office")
     private boolean isOffice;
+
+    @ManyToOne
+    @JoinColumn(name = "employee", nullable = false)
+    private UserEntity employee;
+
+    @ManyToOne
+    @JoinColumn(name = "office_send_id")
+    private OfficeEntity officeSend;
+
+    @ManyToOne
+    @JoinColumn(name = "office_receive_id")
+    private OfficeEntity officeReceive;
+
+    @Column(name = "is_delivered")
+    private boolean isDelivered;
 }

@@ -2,6 +2,7 @@ package com.student.logisticscompany.controller;
 
 import com.student.logisticscompany.dto.CreateParcelDTO;
 import com.student.logisticscompany.dto.OfficeDTO;
+import com.student.logisticscompany.dto.ParcelDTO;
 import com.student.logisticscompany.entity.OfficeEntity;
 import com.student.logisticscompany.entity.UserEntity;
 import com.student.logisticscompany.service.EmployeeService;
@@ -30,13 +31,14 @@ public class ParcelsController {
 
     @GetMapping
     public String getParcelsView(Model model) {
+        model.addAttribute("parcels", modelMapper.map(parcelService.getAll(), ParcelDTO.class));
         return "parcels/parcels";
     }
 
     @GetMapping("/new")
     public String getNewParcelView(Model model, Authentication authentication) {
         UserEntity user = (UserEntity) authentication.getPrincipal();
-        model.addAttribute("parcel", new CreateParcelDTO());
+        CreateParcelDTO  createParcelDTO = new CreateParcelDTO();
         List<OfficeDTO> allOffices = officeService.getAll()
                         .stream()
                         .map(office -> modelMapper.map(office, OfficeDTO.class))
@@ -44,12 +46,15 @@ public class ParcelsController {
         model.addAttribute("offices", allOffices);
         OfficeDTO officeDTO = modelMapper.map(employeeService.getOffice(user.getUsername()), OfficeDTO.class);
         model.addAttribute("employeeOffice", officeDTO);
+        model.addAttribute("parcel", createParcelDTO);
         return "parcels/new";
     }
 
     @PostMapping("/new")
-    public String addNewParcel(Model model, Authentication authentication, @ModelAttribute("parcel")CreateParcelDTO createParcelDTO) {
+    public String addNewParcel(Model model, Authentication authentication, @ModelAttribute("parcel") CreateParcelDTO createParcelDTO) {
+        UserEntity employeeUser = (UserEntity) authentication.getPrincipal();
+        createParcelDTO.setEmployeeId(employeeUser.getId());
         parcelService.addNew(createParcelDTO);
-        return "parcels/new";
+        return "parcels/parcels";
     }
 }
