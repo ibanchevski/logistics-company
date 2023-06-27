@@ -22,7 +22,7 @@ public class OfficeEntity extends BaseEntity {
     @Column(name = "address")
     private String address;
 
-    @JoinColumn(name = "added_by", nullable = false)
+    @JoinColumn(name = "added_by")
     @ManyToOne
     private UserEntity addedBy;
 

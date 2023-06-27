@@ -26,7 +26,7 @@ public class EmployeeEntity extends BaseEntity {
     private String type;
 
     @ManyToOne
-    @JoinColumn(name = "added_by", nullable = false)
+    @JoinColumn(name = "added_by")
     private UserEntity addedBy;
 
     @ManyToOne

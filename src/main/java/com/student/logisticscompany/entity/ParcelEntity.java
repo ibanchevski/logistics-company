@@ -44,9 +44,9 @@ public class ParcelEntity extends BaseEntity {
     @JoinColumn(name = "office_send_id")
     private OfficeEntity officeSend;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "office_receive_id")
-    private OfficeEntity officeReceive;
+    public OfficeEntity officeReceive;
 
     @Column(name = "is_delivered")
     private boolean isDelivered;

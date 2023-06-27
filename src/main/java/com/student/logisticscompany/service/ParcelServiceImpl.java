@@ -1,6 +1,7 @@
 package com.student.logisticscompany.service;
 
 import com.student.logisticscompany.dto.CreateParcelDTO;
+import com.student.logisticscompany.entity.OfficeEntity;
 import com.student.logisticscompany.entity.ParcelEntity;
 import com.student.logisticscompany.repository.ParcelRepository;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,8 @@ public class ParcelServiceImpl implements ParcelService {
         parcel.setSender(userService.findByUsername(createParcelDTO.getSenderUsername()));
         parcel.setReceiver(userService.findByUsername(createParcelDTO.getReceiverUsername()));
 
-        if (!createParcelDTO.isOffice()) {
+        if (createParcelDTO.getIsOffice() != null && !createParcelDTO.getIsOffice()) {
+            parcel.setOfficeReceive(null);
             parcel.setAddress(createParcelDTO.getAddress());
         }
         return parcelRepository.save(parcel);

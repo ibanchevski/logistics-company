@@ -31,7 +31,11 @@ public class ParcelsController {
 
     @GetMapping
     public String getParcelsView(Model model) {
-        model.addAttribute("parcels", modelMapper.map(parcelService.getAll(), ParcelDTO.class));
+        List<ParcelDTO> parcels = parcelService.getAll()
+                        .stream()
+                        .map(parcelEntity -> modelMapper.map(parcelEntity, ParcelDTO.class))
+                        .toList();
+        model.addAttribute("parcels", parcels);
         return "parcels/parcels";
     }
 
@@ -55,6 +59,6 @@ public class ParcelsController {
         UserEntity employeeUser = (UserEntity) authentication.getPrincipal();
         createParcelDTO.setEmployeeId(employeeUser.getId());
         parcelService.addNew(createParcelDTO);
-        return "parcels/parcels";
+        return "redirect:/parcels";
     }
 }

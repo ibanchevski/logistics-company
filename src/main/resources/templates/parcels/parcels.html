@@ -5,14 +5,17 @@
   <header th:replace="~{fragments :: header}"></header>
   <h1>Parcels</h1>
   <a href="/parcels/new" class="button is-success is-light">New order</a>
-  <table>
+  <table class="table ">
     <thead>
       <tr>
         <th>Id</th>
         <th>Description</th>
         <th>Sender</th>
         <th>Receiver</th>
+        <th>Office send</th>
+        <th>Office receive</th>
         <th>Address</th>
+        <th>To Office</th>
         <th>Delivered</th>
       </tr>
     </thead>
@@ -20,9 +23,12 @@
       <tr th:each="parcel: ${parcels}">
         <td th:text="${parcel.id}"></td>
         <td th:text="${parcel.description}"></td>
-        <td th:text="${parcel.sender}"></td>
-        <td th:text="${parcel.receiver}"></td>
+        <td th:text="${parcel.sender.getName()}"></td>
+        <td th:text="${parcel.receiver.getName()}"></td>
+        <td th:text="${parcel.officeSend.getName()}"></td>
+        <td th:text="${parcel.officeReceive?.getName()}"></td>
         <td th:text="${parcel.address}"></td>
+        <td th:text="${parcel.isOffice}"></td>
         <td th:text="${parcel.isDelivered}"></td>
       </tr>
     </tbody>

@@ -52,15 +52,40 @@
                                 <label for="officeSend" class="label">Office</label>
                             </div>
                             <div class="field-body">
-                                <input type="text" name="officeSendId" th:value="${employeeOffice.getId()}" />
-                                <input type="text" th:attr="value=${employeeOffice.getName()}" disabled>
-<!--                                <input type="text" id="officeSend" name="officeSend" th:attr="value=${employeeOffice}">-->
-<!--                                <input type="text" th:attr="value=${employeeOffice.getName()}">-->
-<!--                                <div class="select is-disabled">-->
-<!--                                    <select id="officeSend" name="officeSend" disabled>-->
-<!--                                        <option th:value="${employeeOffice}" th:text="${employeeOffice.getName()}"></option>-->
-<!--                                    </select>-->
-<!--                                </div>-->
+                                <input type="text" name="officeSendId" th:value="${employeeOffice.getId()}" hidden />
+                                <input type="text" id="officeSend" class="input" th:attr="value=${employeeOffice.getName()}" disabled />
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="officeReceive" class="label">Address</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="select">
+                                        <select id="officeReceive" th:field="*{officeReceiveId}">
+                                            <option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.getName()}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label class="checkbox" for="officeCheckbox">
+                                        <input type="checkbox" name="isOffice" id="isOffice" checked hidden>
+                                        <input type="checkbox" id="officeCheckbox" onclick="useOtherAddress()">
+                                        Other address
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field is-horizontal is-hidden" id="otherAddressWrapper">
+                            <div class="field-label"></div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <input type="text" name="address" hidden />
+                                    <textarea class="textarea" placeholder="Custom address"></textarea>
+                                </div>
                             </div>
                         </div>
 
@@ -80,36 +105,6 @@
                                             <input type="number" class="input" id="weight" min="0">
                                         </p>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-horizontal">
-                            <div class="field-label">
-                                <label for="officeReceive" class="label">Office (Receive)</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="field">
-                                    <div class="select">
-                                        <select id="officeReceive" th:field="*{officeReceiveId}">
-                                            <option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.getName()}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="isOffice" onclick="useOtherAddress()">
-                                        Other address
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field is-horizontal is-hidden" id="otherAddressWrapper">
-                            <div class="field-label"></div>
-                            <div class="field-body">
-                                <div class="field">
-                                    <textarea class="textarea" placeholder="Custom address"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -137,6 +132,7 @@
     const DEBOUNCE_TIME_MS = 500;
     let debTimer = undefined;
     let isUseOtherAddress = false;
+    const isOfficeEl = document.getElementById('isOffice');
 
     function searchUser(searchPanelId, ctx) {
         if (debTimer) {
@@ -179,17 +175,24 @@
 
     function useOtherAddress() {
         isUseOtherAddress = !isUseOtherAddress;
+
         const otherAddressWrapper = document.querySelector('#otherAddressWrapper');
         const officeReceiveSelect = document.querySelector('#officeReceive');
         if (isUseOtherAddress) {
             otherAddressWrapper.classList.remove('is-hidden');
             officeReceiveSelect.parentElement.classList.add('is-disabled');
             officeReceiveSelect.setAttribute("disabled", "true");
+            isOfficeEl.removeAttribute("checked");
         } else {
             otherAddressWrapper.classList.add('is-hidden');
             officeReceiveSelect.parentElement.classList.remove('is-disabled');
             officeReceiveSelect.removeAttribute("disabled");
+            isOfficeEl.setAttribute("checked", "");
         }
+
+        document.querySelector('#otherAddressWrapper').addEventListener('keyup', (evt) => {
+            document.querySelector('#otherAddressWrapper input').setAttribute('value', evt.target.value);
+        });
     }
 </script>
 

@@ -15,5 +15,5 @@ public class CreateParcelDTO {
     private long officeReceiveId;
     private long employeeId;
     private String address;
-    private boolean isOffice;
+    private Boolean isOffice;
 }

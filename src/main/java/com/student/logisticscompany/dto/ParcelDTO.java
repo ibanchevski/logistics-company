@@ -18,5 +18,6 @@ public class ParcelDTO {
     private String address;
     private OfficeDTO officeSend;
     private OfficeDTO officeReceive;
+    private boolean isOffice;
     private boolean isDelivered;
 }
