@@ -29,4 +29,9 @@ public class OfficeServiceImpl implements OfficeService {
                 .stream()
                 .toList();
     }
+
+    @Override
+    public void delete(Long officeId) {
+        officeRepository.deleteById(officeId);
+    }
 }

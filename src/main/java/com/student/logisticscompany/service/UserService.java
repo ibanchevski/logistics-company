@@ -13,4 +13,6 @@ public interface UserService extends UserDetailsService {
     List<UserEntity> searchUsers(String searchTerm);
 
     UserEntity findByUsername(String username);
+
+    List<UserEntity> findAllClients();
 }

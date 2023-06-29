@@ -2,6 +2,7 @@ package com.student.logisticscompany.controller;
 
 import com.student.logisticscompany.dto.ActivateEmployeeDTO;
 import com.student.logisticscompany.dto.AddEmployeeDTO;
+import com.student.logisticscompany.dto.EmployeeDTO;
 import com.student.logisticscompany.dto.RegisterEmployeeDTO;
 import com.student.logisticscompany.entity.EmployeeEntity;
 import com.student.logisticscompany.entity.UserEntity;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/employees")
@@ -27,6 +30,12 @@ public class EmployeesController {
 
     @GetMapping
     public String getEmployeesView(Model model) {
+        List<EmployeeDTO> employees = employeeService.getAll()
+                .stream()
+                .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+                .toList();
+
+        model.addAttribute("employees", employees);
         return "employees/employees";
     }
 

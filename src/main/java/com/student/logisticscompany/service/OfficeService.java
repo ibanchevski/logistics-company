@@ -9,4 +9,6 @@ import java.util.List;
 public interface OfficeService {
     OfficeEntity create(@Valid AddOfficeDTO addOfficeDTO);
     List<OfficeEntity> getAll();
+
+    void delete(Long officeId);
 }

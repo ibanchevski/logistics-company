@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -26,6 +27,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+
+
+    @Override
+    public List<EmployeeEntity> getAll() {
+        return employeeRepository.findAll();
+    }
 
     @Override
     public EmployeeEntity add(@Valid AddEmployeeDTO addEmployeeDTO) {

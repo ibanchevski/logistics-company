@@ -23,6 +23,11 @@ public class UserServiceImpl implements UserService  {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    public List<UserEntity> findAllClients() {
+        return userRepository.findAllWithRoleUser();
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username);
         if (user == null) {
