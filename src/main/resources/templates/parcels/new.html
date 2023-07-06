@@ -6,6 +6,20 @@
     <div class="columns is-centered">
         <div class="column is-two-fifths my-5">
             <div class="card">
+                <div class="message is-info">
+                    <div class="message-body">
+                        <p>
+                            Delivery fee is calculated based on weight and delivery address:
+                        </p>
+                        <ul>
+                            <li>Parcels weight <strong>up to</strong> 10KG: &euro;8</li>
+                            <li>Parcels weight <strong>up to</strong> 20KG: &euro;10</li>
+                            <li>Parcels weight <strong>above</strong> 20KG: &euro;10 + &euro;0.5/KG</li>
+                        </ul>
+                        <br>
+                        <p><span class="has-text-danger-dark">*</span>Extra <strong>&euro;3 fee</strong> is added for non-office addresses</p>
+                    </div>
+                </div>
                 <div class="card-content">
                     <div class="title">New parcel</div>
                     <form name="newParcel" th:object="${parcel}" th:action="@{/parcels/new}" method="post">
@@ -102,13 +116,22 @@
                                             </a>
                                         </p>
                                         <p class="control is-expanded">
-                                            <input type="number" class="input" id="weight" min="0">
+                                            <input type="number" class="input" id="weight" min="0" step="0.01" onchange="calculateFee()">
                                         </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label for="fee" class="label has-text-info-dark is-size-5">Delivery fee</label>
+                            </div>
+                            <div class="field-body">
+                                <input type="number" name="fee" id="fee" hidden="hidden">
+                                <span class="tag is-info is-large" id="feeVis">N/A</span>
+                            </div>
+                        </div>
 
                         <div class="field is-horizontal">
                             <div class="field-label"></div>
@@ -117,11 +140,6 @@
                             </div>
                         </div>
                     </form>
-                </div>
-                <div class="card-footer">
-                    <p class="card-footer-item has-text-info-dark">
-                        Total:
-                    </p>
                 </div>
             </div>
         </div>
@@ -193,6 +211,34 @@
         document.querySelector('#otherAddressWrapper').addEventListener('keyup', (evt) => {
             document.querySelector('#otherAddressWrapper input').setAttribute('value', evt.target.value);
         });
+
+        calculateFee();
+    }
+
+    function calculateFee() {
+        let weight = document.getElementById('weight').value;
+        let fee = 0;
+
+        if (weight) {
+            console.log(weight);
+            weight = Number(weight);
+            if (weight <= 10) {
+                fee += 8;
+            } else if (weight <= 20) {
+                fee += 10;
+            } else {
+                fee = 10 + (weight * 0.5);
+            }
+
+            if (isUseOtherAddress) {
+                fee += 3;
+            }
+
+            fee = fee.toFixed(2);
+            console.log('fee', fee);
+            document.getElementById('fee').setAttribute("value", String(fee));
+            document.getElementById('feeVis').innerHTML = '&euro;' + fee;
+        }
     }
 </script>
 

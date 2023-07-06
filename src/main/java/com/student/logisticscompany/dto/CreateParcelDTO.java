@@ -16,4 +16,5 @@ public class CreateParcelDTO {
     private long employeeId;
     private String address;
     private Boolean isOffice;
+    private double fee;
 }

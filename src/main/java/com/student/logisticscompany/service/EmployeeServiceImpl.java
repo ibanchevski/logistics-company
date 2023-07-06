@@ -40,6 +40,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public long getCount() {
+        return employeeRepository.count();
+    }
+
+    @Override
     public EmployeeEntity add(@Valid AddEmployeeDTO addEmployeeDTO) {
         return this.employeeRepository.save(modelMapper.map(addEmployeeDTO, EmployeeEntity.class));
     }

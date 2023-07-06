@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="column">
+  <div class="column">
+    <section class="hero">
+      <div class="hero-body">
+        <p class="title">
+          Company:
+        </p>
+        <p class="subtitle">
+          Hero subtitle
+        </p>
+      </div>
+    </section>
+    <div class="tile is-ancestor">
+      <div class="tile is-vertical is-8">
+        <div class="tile">
+          <div class="tile is-parent is-vertical">
+            <article class="tile is-child notification is-primary">
+              <p class="title">Employees</p>
+              <p class="subtitle is-size-3" th:text="${employeesCount}"></p>
+            </article>
+            <article class="tile is-child notification is-warning">
+              <p class="title">Offices</p>
+              <p class="subtitle is-size-3" th:text="${officesCount}"></p>
+            </article>
+          </div>
+          <div class="tile is-parent">
+            <article class="tile is-child notification is-info">
+              <p class="title">Total revenue</p>
+              <p class="subtitle">With an image</p>
+              <p class="is-text is-size-5 mb-2">View specific period</p>
+              <div class="content">
+                <form action="">
+                  <div class="field">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" name="" id="startDate" class="input">
+                  </div>
+                  <div class="field">
+                    <label for="endDate">Start Date</label>
+                    <input type="date" name="" id="endDate" class="input">
+                  </div>
+                  <div class="field">
+                    <input type="submit" class="button is-info is-light" value="Load">
+                  </div>
+                </form>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="tile is-parent">
+          <article class="tile is-child notification is-danger">
+            <p class="title">Total parcels</p>
+            <p class="subtitle is-size-3" th:text="${parcelsCount}">Aligned with the right tile</p>
+          </article>
+        </div>
+      </div>
+      <div class="tile is-parent">
+        <article class="tile is-child notification is-success">
+          <div class="content">
+            <p class="title">Shipped parcels</p>
+            <p class="subtitle">With even more content</p>
+            <div class="content">
+              <!-- Content -->
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

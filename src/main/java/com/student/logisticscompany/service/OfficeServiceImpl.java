@@ -34,4 +34,9 @@ public class OfficeServiceImpl implements OfficeService {
     public void delete(Long officeId) {
         officeRepository.deleteById(officeId);
     }
+
+    @Override
+    public long getCount() {
+        return officeRepository.count();
+    }
 }

@@ -34,4 +34,9 @@ public class ParcelServiceImpl implements ParcelService {
     public List<ParcelEntity> getAll() {
         return parcelRepository.findAll();
     }
+
+    @Override
+    public long getCount() {
+        return parcelRepository.count();
+    }
 }

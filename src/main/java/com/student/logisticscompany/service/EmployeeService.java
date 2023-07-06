@@ -19,4 +19,6 @@ public interface EmployeeService {
     List<EmployeeEntity> getAll();
 
     List<EmployeeEntity> findWithFilter(String filter);
+
+    long getCount();
 }

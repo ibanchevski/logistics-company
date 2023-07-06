@@ -11,4 +11,6 @@ public interface OfficeService {
     List<OfficeEntity> getAll();
 
     void delete(Long officeId);
+
+    long getCount();
 }

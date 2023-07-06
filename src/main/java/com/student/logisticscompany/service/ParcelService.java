@@ -10,4 +10,6 @@ public interface ParcelService {
     ParcelEntity addNew(CreateParcelDTO createParcelDTO);
 
     List<ParcelEntity> getAll();
+
+    long getCount();
 }
