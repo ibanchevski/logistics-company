@@ -9,10 +9,10 @@
       <div class="hero-body">
         <p class="title">
           Company:
+          <span th:text="${company.name}"></span>
+          <a href="/company/edit" class="button">Edit</a>
         </p>
-        <p class="subtitle">
-          Hero subtitle
-        </p>
+        <p class="subtitle" th:text="${company.address}"></p>
       </div>
     </section>
     <div class="tile is-ancestor">
@@ -30,24 +30,31 @@
           </div>
           <div class="tile is-parent">
             <article class="tile is-child notification is-info">
-              <p class="title">Total revenue</p>
+              <p class="title">
+                Total revenue:
+                <span th:text="${'&euro;' + company.revenue}"></span>
+              </p>
               <p class="subtitle">With an image</p>
               <p class="is-text is-size-5 mb-2">View specific period</p>
               <div class="content">
-                <form action="">
+                <form th:action="@{/company/revenue}" method="get">
                   <div class="field">
                     <label for="startDate">Start Date</label>
-                    <input type="date" name="" id="startDate" class="input">
+                    <input type="date" name="startDate" id="startDate" class="input">
                   </div>
                   <div class="field">
-                    <label for="endDate">Start Date</label>
-                    <input type="date" name="" id="endDate" class="input">
+                    <label for="endDate">End Date</label>
+                    <input type="date" name="endDate" id="endDate" class="input">
                   </div>
                   <div class="field">
                     <input type="submit" class="button is-info is-light" value="Load">
                   </div>
                 </form>
               </div>
+              <p class="subtitle" th:if="${periodRevenue}">
+                Revenue in this period:
+                &euro;<span th:text="${periodRevenue}"></span>
+              </p>
             </article>
           </div>
         </div>

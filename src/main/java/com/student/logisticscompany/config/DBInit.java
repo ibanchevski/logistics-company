@@ -1,7 +1,9 @@
 package com.student.logisticscompany.config;
 
+import com.student.logisticscompany.entity.CompanyEntity;
 import com.student.logisticscompany.entity.RoleEntity;
 import com.student.logisticscompany.entity.UserEntity;
+import com.student.logisticscompany.repository.CompanyRepository;
 import com.student.logisticscompany.repository.RoleRepository;
 import com.student.logisticscompany.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class DBInit implements CommandLineRunner {
     private RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CompanyRepository companyRepository;
 
 
     @Override
@@ -39,6 +42,15 @@ public class DBInit implements CommandLineRunner {
         if (usersCount == 0) {
             this.userRepository.save(admin);
         }
+
+        CompanyEntity company = new CompanyEntity();
+        company.setRevenue(0);
+        company.setName("My company");
+
+        if (this.companyRepository.count() == 0) {
+            companyRepository.save(company);
+        }
+
     }
 
 }

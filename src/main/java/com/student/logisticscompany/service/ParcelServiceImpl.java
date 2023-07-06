@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class ParcelServiceImpl implements ParcelService {
     private final ModelMapper modelMapper;
     private final ParcelRepository parcelRepository;
+    private final CompanyService companyService;
     private final UserService userService;
 
     @Override
@@ -29,6 +31,11 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public List<ParcelEntity> getAll() {
         return parcelRepository.findAll();
+    }
+
+    @Override
+    public List<ParcelEntity> getAllDeliveredInPeriod(LocalDate startDate, LocalDate endDate) {
+        return parcelRepository.findByDeliveryDateBetween(startDate, endDate);
     }
 
     @Override
@@ -46,11 +53,20 @@ public class ParcelServiceImpl implements ParcelService {
             parcel.get().setDeliveredBy(deliveryEmployee);
 
             parcelRepository.save(parcel.get());
+
+            companyService.addRevenue(parcel.get().getFee());
         }
     }
 
     @Override
     public void cancel(Long id) {
-        parcelRepository.deleteById(id);
+        Optional<ParcelEntity> parcel = parcelRepository.findById(id);
+
+        if (parcel.isPresent()) {
+            parcelRepository.delete(parcel.get());
+
+            // We assume each cancelled parcel as company loss
+            companyService.addRevenue(parcel.get().getFee() * -1);
+        }
     }
 }
