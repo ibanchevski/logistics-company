@@ -35,6 +35,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<EmployeeEntity> findWithFilter(String filter) {
+        return employeeRepository.findByType(filter);
+    }
+
+    @Override
     public EmployeeEntity add(@Valid AddEmployeeDTO addEmployeeDTO) {
         return this.employeeRepository.save(modelMapper.map(addEmployeeDTO, EmployeeEntity.class));
     }

@@ -15,7 +15,7 @@
     <div class="column is-one-quarter" th:if="${success == null}">
         <div class="card">
             <div class="card-content">
-                <h1 class="title">New employee registration</h1>
+                <h1 class="title">New employee</h1>
                 <form name="register" th:object="${employee}" th:action="@{/employees/new}" method="post">
                     <div class="field">
                         <label for="name" class="label">Name</label>
@@ -30,9 +30,8 @@
                     <div class="field">
                         <label for="emplType" class="label">Type</label>
                         <div class="control">
-                            <div class="select is-rounded">
+                            <div class="select">
                                 <select id="emplType" th:field="*{type}">
-                                    <option value="null">Select employee type</option>
                                     <option value="OFFICE">Office employee</option>
                                     <option value="DELIVERY">Delivery employee</option>
                                 </select>
@@ -43,9 +42,8 @@
                     <div class="field">
                         <label for="office" class="label">Office</label>
                         <div class="control">
-                            <div class="select is-rounded">
+                            <div class="select">
                                 <select id="office" th:field="*{office}">
-                                    <option value="null">Select office</option>
                                     <option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.getName()}"></option>
                                 </select>
                             </div>

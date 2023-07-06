@@ -3,58 +3,107 @@
 <head th:replace="~{fragments :: head}"></head>
 <body>
 <header th:replace="~{fragments :: header}"></header>
-<h1>Employees</h1>
-<a href="/employees/new" class="button is-success is-light">
-    Register new employee
-</a>
-<table class="table is-bordered">
-    <thead>
-    <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Username</th>
-        <th>Type</th>
-        <th>Office</th>
-        <th>Date added</th>
-        <th>Added by</th>
-        <th>Activated</th>
-        <th sec:authorize="hasAuthority('ADMIN')">Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="employee: ${employees}">
-        <td th:text="${employee.id}"></td>
-        <td th:text="${employee.name}"></td>
-        <td th:text="${employee.username}"></td>
-        <td th:text="${employee.type}"></td>
-        <td>
-            <a th:href="@{'/offices/'+${employee.office.id}}" th:text="${employee.office.getName()}"></a>
-        </td>
-        <td th:text="${employee.dateAdded}"></td>
-        <td th:text="${employee.addedBy.getName()}"></td>
-        <td th:text="${employee.isActivated()}"></td>
-        <td sec:authorize="hasAuthority('ADMIN')">
-            <div class="buttons">
-                <button class="button is-info is-light">Edit</button>
-                <a th:href="@{'/employees/delete/' + ${employee.id}}" class="button is-danger is-light js-modal-trigger" data-target="modal-js-example">Delete</a>
+<div class="column">
+    <div class="column">
+        <h1 class="title">Employees</h1>
+        <a href="/employees/new" class="button is-success is-light">
+            Register new employee
+        </a>
+    </div>
+</div>
+<div class="columns">
+    <div class="column is-one-fifth">
+        <aside class="menu mx-2">
+            <ul class="menu-list">
+                <li>
+                    <a href="/employees" id="all">All</a>
+                </li>
+                <li>
+                    <a href="?filter=OFFICE" id="office">Office</a>
+                </li>
+                <li>
+                    <a href="?filter=DELIVERY" id="delivery">Delivery</a>
+                </li>
+            </ul>
+        </aside>
+    </div>
+    <div class="column is-7">
+        <form action="" class="mb-5">
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" type="text" placeholder="Find employee">
+                </div>
+                <div class="control">
+                    <a class="button is-info">
+                        Search
+                    </a>
+                </div>
             </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<nav class="pagination is-small" role="navigation" aria-label="pagination">
-    <a class="pagination-previous">Previous</a>
-    <a class="pagination-next">Next page</a>
-    <ul class="pagination-list">
-        <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
-        <li><span class="pagination-ellipsis">&hellip;</span></li>
-        <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
-        <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
-        <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
-        <li><span class="pagination-ellipsis">&hellip;</span></li>
-        <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
-    </ul>
-</nav>
+        </form>
+        <table class="table is-bordered is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Type</th>
+                    <th>Office</th>
+                    <th>Date added</th>
+                    <th>Added by</th>
+                    <th>Activated</th>
+                    <th sec:authorize="hasAuthority('ADMIN')">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="employee: ${employees}">
+                    <td th:text="${employee.id}"></td>
+                    <td th:text="${employee.name}"></td>
+                    <td th:text="${employee.username}"></td>
+                    <td th:text="${employee.type}"></td>
+                    <td>
+                        <a th:href="@{'/offices/'+${employee.office.id}}" th:text="${employee.office.getName()}"></a>
+                    </td>
+                    <td th:text="${employee.dateAdded}"></td>
+                    <td th:text="${employee.addedBy.getName()}"></td>
+                    <td th:text="${employee.isActivated()}"></td>
+                    <td sec:authorize="hasAuthority('ADMIN')">
+                        <div class="buttons">
+                            <button class="button is-info is-light">Edit</button>
+                            <a th:href="@{'/employees/delete/' + ${employee.id}}" class="button is-danger is-light js-modal-trigger" data-target="modal-js-example">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav class="pagination is-small" role="navigation" aria-label="pagination">
+            <a class="pagination-previous">Previous</a>
+            <a class="pagination-next">Next page</a>
+            <ul class="pagination-list">
+                <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+                <li><span class="pagination-ellipsis">&hellip;</span></li>
+                <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+                <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+                <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+                <li><span class="pagination-ellipsis">&hellip;</span></li>
+                <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
 <footer th:replace="~{fragments :: footer}"></footer>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+    const linksMap = {
+        'null': 'all',
+        'DELIVERY': 'delivery',
+        'OFFICE': 'office'
+    }
+
+    document.getElementById(linksMap[String(filterParam)]).classList.add('is-active');
+
+
+</script>
 </body>
 </html>

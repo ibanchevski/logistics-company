@@ -13,10 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,8 +26,16 @@ public class EmployeesController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    public String getEmployeesView(Model model) {
-        List<EmployeeDTO> employees = employeeService.getAll()
+    public String getEmployeesView(Model model, @RequestParam(required = false) String filter) {
+        List<EmployeeEntity> employeeEntities;
+
+        if (filter != null && filter.length() != 0) {
+            employeeEntities = employeeService.findWithFilter(filter);
+        } else {
+            employeeEntities = employeeService.getAll();
+        }
+
+        List<EmployeeDTO> employees = employeeEntities
                 .stream()
                 .map(employee -> modelMapper.map(employee, EmployeeDTO.class))
                 .toList();
@@ -67,7 +72,6 @@ public class EmployeesController {
             model.addAttribute("employee", modelMapper.map(employeeToActivate, RegisterEmployeeDTO.class));
             return "employees/activate-details";
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
             model.addAttribute("error", ex.getMessage());
             return "employees/activate";
         }

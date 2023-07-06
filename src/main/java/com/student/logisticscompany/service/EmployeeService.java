@@ -17,4 +17,6 @@ public interface EmployeeService {
     OfficeEntity getOffice(String username);
 
     List<EmployeeEntity> getAll();
+
+    List<EmployeeEntity> findWithFilter(String filter);
 }
