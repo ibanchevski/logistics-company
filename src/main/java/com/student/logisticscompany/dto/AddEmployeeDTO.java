@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class AddEmployeeDTO {
+    @NotEmpty
     private String name;
 
     @NotEmpty

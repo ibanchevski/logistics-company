@@ -22,16 +22,18 @@
                 </div>
                 <div class="card-content">
                     <div class="title">New parcel</div>
-                    <form name="newParcel" th:object="${parcel}" th:action="@{/parcels/new}" method="post">
-
+                    <form action="#" th:action="@{/parcels/new}" th:object="${parcel}" method="post">
                         <div class="field is-horizontal">
                             <div class="field-label">
                                 <label for="senderSearch" class="label">Sender</label>
                             </div>
                             <div class="field-body">
                                 <article class="panel is-white" id="senderSearchPanel">
+                                    <div class="panel-heading" th:if="${#fields.hasErrors('sender')}">
+                                        <p class="help is-danger">Please select sender!</p>
+                                    </div>
                                     <div class="panel-block">
-                                        <input id="sender" type="text" name="senderUsername" th:field="*{senderUsername}" hidden />
+                                        <input id="sender" type="text" th:field="*{sender}" hidden />
                                         <input id="senderSearch" class="input" type="text" placeholder="Search" onkeyup="searchUser('senderSearchPanel', this)" autocomplete="off" />
                                     </div>
                                 </article>
@@ -44,8 +46,11 @@
                             </div>
                             <div class="field-body">
                                 <article class="panel is-white" id="receiverSearchPanel">
+                                    <div class="panel-heading" th:if="${#fields.hasErrors('receiver')}">
+                                        <p class="help is-danger">Please select receiver!</p>
+                                    </div>
                                     <div class="panel-block">
-                                        <input id="receiver" type="text" name="receiverUsername" th:field="*{receiverUsername}" hidden />
+                                        <input id="receiver" type="text" th:field="*{receiver}" hidden />
                                         <input id="receiverSearch" class="input" type="text" placeholder="Search" onkeyup="searchUser('receiverSearchPanel', this)" autocomplete="off" />
                                     </div>
                                 </article>
@@ -66,8 +71,11 @@
                                 <label for="officeSend" class="label">Office</label>
                             </div>
                             <div class="field-body">
-                                <input type="text" name="officeSendId" th:value="${employeeOffice.getId()}" hidden />
-                                <input type="text" id="officeSend" class="input" th:attr="value=${employeeOffice.getName()}" disabled />
+                                <div class="select">
+                                    <select id="officeSend" th:field="${parcel.officeSend}" disabled>
+                                        <option th:value="${employeeOffice.id}" th:text="${employeeOffice.name}"></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -78,8 +86,8 @@
                             <div class="field-body">
                                 <div class="field">
                                     <div class="select">
-                                        <select id="officeReceive" th:field="*{officeReceiveId}">
-                                            <option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.getName()}"></option>
+                                        <select id="officeReceive" th:field="${parcel.officeReceive}">
+                                            <option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.name}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -97,7 +105,7 @@
                             <div class="field-label"></div>
                             <div class="field-body">
                                 <div class="field">
-                                    <input type="text" name="address" hidden />
+                                    <input type="text" th:field="${parcel.address}" hidden />
                                     <textarea class="textarea" placeholder="Custom address"></textarea>
                                 </div>
                             </div>
@@ -116,9 +124,10 @@
                                             </a>
                                         </p>
                                         <p class="control is-expanded">
-                                            <input type="number" class="input" id="weight" min="0" step="0.01" onchange="calculateFee()">
+                                            <input type="number" class="input" id="weight" th:field="${parcel.weight}" min="0" step="0.01" onchange="calculateFee()">
                                         </p>
                                     </div>
+                                    <p class="help is-danger" th:if="${#fields.hasErrors('weight')}">Please, enter parcel weight!</p>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +183,7 @@
         document.querySelectorAll(`#${searchPanelId}.panel a`).forEach(e => e.remove());
         searchResArr.forEach(user => {
             const template = `
-            <a class="panel-block" id="${user.username}">
+            <a class="panel-block" id="${user.id}">
                 ${user.name}
             </a>
             `;

@@ -20,9 +20,9 @@ public class CompanyController {
 
     @GetMapping
     public String companyView(Model model) {
-//        model.addAttribute("employeesCount", employeeService.getCount());
-//        model.addAttribute("officesCount", officeService.getCount());
-//        model.addAttribute("parcelsCount", parcelService.getCount());
+        model.addAttribute("employeesCount", employeeService.getCount());
+        model.addAttribute("officesCount", officeService.getCount());
+        model.addAttribute("parcelsCount", parcelService.getCount());
 
         return "company/company";
     }

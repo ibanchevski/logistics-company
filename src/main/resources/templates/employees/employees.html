@@ -3,12 +3,9 @@
 <head th:replace="~{fragments :: head}"></head>
 <body>
 <header th:replace="~{fragments :: header}"></header>
-<div class="column">
+<div class="columns">
     <div class="column">
         <h1 class="title">Employees</h1>
-        <a href="/employees/new" class="button is-success is-light">
-            Register new employee
-        </a>
     </div>
 </div>
 <div class="columns">
@@ -28,6 +25,9 @@
         </aside>
     </div>
     <div class="column is-9">
+        <a href="/employees/new" class="button is-success is-medium mb-3 is-light">
+            New employee
+        </a>
         <form action="" class="mb-5">
             <div class="field has-addons">
                 <div class="control">
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </form>
-        <table class="table is-bordered is-fullwidth">
+        <table class="table is-fullwidth">
             <thead>
                 <tr>
                     <th>Id</th>

@@ -21,4 +21,6 @@ public interface EmployeeService {
     List<EmployeeEntity> findWithFilter(String filter);
 
     long getCount();
+
+    void deleteEmployee(Long employeeId);
 }

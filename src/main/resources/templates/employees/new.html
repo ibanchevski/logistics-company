@@ -20,11 +20,13 @@
                     <div class="field">
                         <label for="name" class="label">Name</label>
                         <input class="input is-medium" id="name" type="text" name="name" th:field="*{name}" placeholder="Full name" required>
+                        <p class="help is-danger" th:if="${#fields.hasErrors('name')}">Please, enter employee name!</p>
                     </div>
 
                     <div class="field">
                         <label class="label " for="username">Username</label>
                         <input class="input is-medium" id="username" type="text" name="username" th:field="*{username}" placeholder="Username" required>
+                        <p class="help is-danger" th:if="${#fields.hasErrors('username')}">Please, enter employee username!</p>
                     </div>
 
                     <div class="field">

@@ -1,5 +1,9 @@
 package com.student.logisticscompany.dto;
 
+import com.student.logisticscompany.entity.OfficeEntity;
+import com.student.logisticscompany.entity.UserEntity;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,12 +13,27 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateParcelDTO {
     private String description;
-    private String senderUsername;
-    private String receiverUsername;
-    private long officeSendId;
-    private long officeReceiveId;
-    private long employeeId;
+
+    @NotNull
+    private UserEntity sender;
+
+    @NotNull
+    private UserEntity receiver;
+
+    private OfficeEntity officeSend;
+
+    @NotNull
+    private OfficeEntity officeReceive;
+
+    private UserEntity employee;
+
     private String address;
+
     private Boolean isOffice;
+
+    @NotNull
+    @DecimalMin("0.01")
+    private double weight;
+
     private double fee;
 }

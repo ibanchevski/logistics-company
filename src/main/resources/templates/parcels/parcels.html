@@ -3,36 +3,86 @@
 <head th:replace="~{fragments :: head}"></head>
 <body>
   <header th:replace="~{fragments :: header}"></header>
-  <h1>Parcels</h1>
-  <a href="/parcels/new" class="button is-success is-light">New order</a>
-  <table class="table ">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Description</th>
-        <th>Sender</th>
-        <th>Receiver</th>
-        <th>Office send</th>
-        <th>Office receive</th>
-        <th>Address</th>
-        <th>To Office</th>
-        <th>Delivered</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="parcel: ${parcels}">
-        <td th:text="${parcel.id}"></td>
-        <td th:text="${parcel.description}"></td>
-        <td th:text="${parcel.sender.getName()}"></td>
-        <td th:text="${parcel.receiver.getName()}"></td>
-        <td th:text="${parcel.officeSend.getName()}"></td>
-        <td th:text="${parcel.officeReceive?.getName()}"></td>
-        <td th:text="${parcel.address}"></td>
-        <td th:text="${parcel.isOffice}"></td>
-        <td th:text="${parcel.isDelivered}"></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="columns">
+    <div class="column">
+      <h1 class="title">Parcels</h1>
+    </div>
+  </div>
+  <div class="columns">
+    <div class="column is-one-fifth">
+      <aside class="menu mx-2">
+        <ul class="menu-list">
+          <li>
+            <a href="/parcels" id="all">All</a>
+          </li>
+          <li>
+            <a href="?filter=PENDING" id="pending">Pending</a>
+          </li>
+          <li>
+            <a href="?filter=DELIVERED" id="delivered">Delivered</a>
+          </li>
+        </ul>
+      </aside>
+    </div>
+    <div class="column is-9">
+      <a href="/parcels/new" class="button is-success is-light is-medium mb-3">New order</a>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Details</th>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Office send</th>
+            <th>Office receive</th>
+            <th>Address</th>
+            <th>To Office</th>
+            <th>Status</th>
+            <th>Delivery date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="parcel: ${parcels}">
+            <td th:text="${parcel.id}"></td>
+            <td th:text="${parcel.description}"></td>
+            <td th:text="${parcel.sender?.getName()}"></td>
+            <td th:text="${parcel.receiver?.getName()}"></td>
+            <td th:text="${parcel.officeSend?.getName()}"></td>
+            <td th:text="${parcel.officeReceive?.getName()}"></td>
+            <td th:text="${parcel.address}"></td>
+            <td>
+              <span class="tag is-info" th:if="${parcel.isOffice()}">Yes</span>
+              <span class="tag" th:unless="${parcel.isOffice()}">No</span>
+            </td>
+            <td>
+              <span class="tag is-success" th:if="${parcel.delivered}">Delivered</span>
+              <span class="tag is-warning" th:unless="${parcel.delivered}">Pending</span>
+            </td>
+            <td th:text="${parcel.deliveryDate}"></td>
+            <td>
+              <div class="buttons">
+                <button class="button is-info is-light">Edit</button>
+                <a th:href="@{'/parcels/deliver/' + ${parcel.id}}" class="button is-success is-light" th:disabled="${parcel.delivered}">Deliver</a>
+                <a th:href="@{'/parcels/cancel/' + ${parcel.id}}" class="button is-danger is-light" th:disabled="${parcel.delivered}">Cancel</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
   <footer th:replace="~{fragments :: footer}"></footer>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+    const linksMap = {
+      'null': 'all',
+      'DELIVERED': 'delivered',
+      'PENDING': 'pending'
+    }
+
+    document.getElementById(linksMap[String(filterParam)]).classList.add('is-active');
+  </script>
 </body>
 </html>

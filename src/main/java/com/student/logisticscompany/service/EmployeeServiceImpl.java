@@ -9,6 +9,7 @@ import com.student.logisticscompany.entity.OfficeEntity;
 import com.student.logisticscompany.entity.RoleEntity;
 import com.student.logisticscompany.entity.UserEntity;
 import com.student.logisticscompany.repository.EmployeeRepository;
+import com.student.logisticscompany.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.Set;
 public class EmployeeServiceImpl implements EmployeeService {
     private final ModelMapper modelMapper;
     private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
@@ -85,5 +87,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         this.userService.registerNewUser(userEmployee);
         return employee;
+    }
+
+    @Override
+    public void deleteEmployee(Long employeeId) {
+        employeeRepository.deleteById(employeeId);
     }
 }

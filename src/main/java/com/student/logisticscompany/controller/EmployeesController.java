@@ -8,11 +8,13 @@ import com.student.logisticscompany.entity.EmployeeEntity;
 import com.student.logisticscompany.entity.UserEntity;
 import com.student.logisticscompany.service.EmployeeService;
 import com.student.logisticscompany.service.OfficeService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,7 +54,15 @@ public class EmployeesController {
     }
 
     @PostMapping("/new")
-    public String registerEmployee(Model model, Authentication authentication, @ModelAttribute("employee") AddEmployeeDTO addEmployeeDTO) {
+    public String registerEmployee(Model model, Authentication authentication, @Valid @ModelAttribute("employee") AddEmployeeDTO addEmployeeDTO,
+                                   BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("employee", new AddEmployeeDTO());
+            model.addAttribute("offices", this.officeService.getAll());
+            return "employees/new";
+        }
+
         addEmployeeDTO.setAddedBy((UserEntity) authentication.getPrincipal());
         this.employeeService.add(addEmployeeDTO);
 
@@ -66,7 +76,7 @@ public class EmployeesController {
     }
 
     @PostMapping("/activate")
-    public String activateEmployee(Model model, @ModelAttribute("activateEmployee")ActivateEmployeeDTO activateEmployeeDTO) {
+    public String activateEmployee(Model model, @ModelAttribute("activateEmployee") ActivateEmployeeDTO activateEmployeeDTO) {
         try {
             EmployeeEntity employeeToActivate = employeeService.activate(activateEmployeeDTO);
             model.addAttribute("employee", modelMapper.map(employeeToActivate, RegisterEmployeeDTO.class));
@@ -78,8 +88,14 @@ public class EmployeesController {
     }
 
     @PostMapping("/activate-details")
-    public String activateEmployeeDetails(Model model, @ModelAttribute("employee")RegisterEmployeeDTO registerEmployeeDTO) {
+    public String activateEmployeeDetails(Model model, @ModelAttribute("employee") RegisterEmployeeDTO registerEmployeeDTO) {
         this.employeeService.register(registerEmployeeDTO);
         return "/login";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteEmployee(Model model, @PathVariable("id") Long id) {
+        this.employeeService.deleteEmployee(id);
+        return "employees/employees";
     }
 }
