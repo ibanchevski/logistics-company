@@ -3,6 +3,8 @@ package com.student.logisticscompany.controller;
 import com.student.logisticscompany.dto.CreateParcelDTO;
 import com.student.logisticscompany.dto.OfficeDTO;
 import com.student.logisticscompany.dto.ParcelDTO;
+import com.student.logisticscompany.entity.OfficeEntity;
+import com.student.logisticscompany.entity.ParcelEntity;
 import com.student.logisticscompany.entity.UserEntity;
 import com.student.logisticscompany.service.EmployeeService;
 import com.student.logisticscompany.service.OfficeService;
@@ -11,12 +13,14 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @Controller
@@ -28,8 +32,33 @@ public class ParcelsController {
     private final ModelMapper modelMapper;
 
     @GetMapping
-    public String getParcelsView(Model model) {
-        List<ParcelDTO> parcels = parcelService.getAll()
+    public String getParcelsView(Model model, Authentication auth, @RequestParam(required = false) String filter) {
+        List<ParcelEntity> parcelEntities;
+        UserEntity currentUser = (UserEntity) auth.getPrincipal();
+
+        if (filter != null && !filter.isEmpty()) {
+            parcelEntities = parcelService.getAllByStatus(filter);
+        } else {
+            parcelEntities = parcelService.getAll();
+        }
+
+        List<String> authorities = auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        List<ParcelEntity> roleBasedParcels = parcelEntities;
+
+        if (authorities.contains("EMPLOYEE") || authorities.contains("DELIVERY")) {
+            OfficeEntity employeeOffice = employeeService.getOffice(currentUser.getUsername());
+            roleBasedParcels = parcelEntities
+                    .stream()
+                    .filter(parcelEntity -> parcelEntity.getOfficeSend().equals(employeeOffice))
+                    .toList();
+        } else if (authorities.contains("USER")) {
+            roleBasedParcels = parcelEntities
+                    .stream()
+                    .filter(parcelEntity -> parcelEntity.getSender().equals(currentUser) || parcelEntity.getReceiver().equals(currentUser))
+                    .toList();
+        }
+
+        List<ParcelDTO> parcels = roleBasedParcels
                         .stream()
                         .map(parcelEntity -> modelMapper.map(parcelEntity, ParcelDTO.class))
                         .toList();

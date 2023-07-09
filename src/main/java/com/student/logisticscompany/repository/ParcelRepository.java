@@ -13,4 +13,6 @@ public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
 //    double calculatePeriodRevenue(LocalDate startDate, LocalDate endDate);
 
     List<ParcelEntity> findByDeliveryDateBetween(LocalDate startDate, LocalDate endDate);
+    List<ParcelEntity> findAllByDeliveredByNotNull();
+    List<ParcelEntity> findAllByDeliveredByIsNull();
 }

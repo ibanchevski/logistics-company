@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<div class="columns is-centered mt-6">
+  <div class="column is-one-quarter" th:if="${success != null}">
+    <article class="message is-success">
+      <div class="message-body">
+        <p>Edit company info</p>
+        <a href="/company">Go back</a>
+      </div>
+    </article>
+  </div>
+  <div class="column is-one-quarter">
+    <div class="card">
+      <div class="card-content">
+        <form name="register" th:object="${company}" th:action="@{/company/edit}" method="post">
+          <div class="field">
+            <label for="name" class="label">Name</label>
+            <input class="input is-medium" id="name" type="text" name="name" th:field="*{name}" placeholder="Company name" required>
+            <p class="help is-danger" th:if="${#fields.hasErrors('name')}">Please, enter company name!</p>
+          </div>
+
+          <div class="field">
+            <label class="label " for="address">Address</label>
+            <input class="input is-medium" id="address" type="text" name="address" th:field="*{address}" placeholder="Address" required>
+          </div>
+
+          <div class="field is-grouped">
+            <div class="control">
+              <button type="submit" class="button is-link">Edit</button>
+            </div>
+            <div class="control">
+              <a href="/company" class="button is-link is-light">Cancel</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

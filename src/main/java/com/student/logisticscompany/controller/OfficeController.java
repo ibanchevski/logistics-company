@@ -48,6 +48,6 @@ public class OfficeController {
     @GetMapping("/delete/{officeId}")
     public String deleteOffice(Model model, @PathVariable Long officeId) {
         officeService.delete(officeId);
-        return "offices/offices";
+        return "redirect:/offices";
     }
 }

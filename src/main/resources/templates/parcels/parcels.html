@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:replace="~{fragments :: head}"></head>
 <body>
   <header th:replace="~{fragments :: header}"></header>
@@ -31,8 +31,13 @@
       </aside>
     </div>
     <div class="column is-9">
-      <a href="/parcels/new" class="button is-success is-light is-medium mb-3">New order</a>
-      <table class="table is-fullwidth">
+      <a href="/parcels/new" class="button is-success is-light is-medium mb-3" sec:authorize="hasAuthority('ADMIN')">New order</a>
+      <article class="message is-info" th:unless="${parcels.size() > 0}">
+        <div class="message-body">
+          You do not have any parcels!
+        </div>
+      </article>
+      <table class="table is-fullwidth" th:if="${parcels.size() > 0}">
         <thead>
           <tr>
             <th>Id</th>
@@ -68,8 +73,8 @@
             <td th:text="${parcel.deliveryDate}"></td>
             <td>
               <div class="buttons">
-                <button class="button is-info is-light">Edit</button>
-                <a th:href="@{'/parcels/deliver/' + ${parcel.id}}" class="button is-success is-light" th:disabled="${parcel.delivered}">Deliver</a>
+                <button class="button is-info is-light" sec:authorize="hasAuthority('ADMIN')">Edit</button>
+                <a th:href="@{'/parcels/deliver/' + ${parcel.id}}" class="button is-success is-light" th:disabled="${parcel.delivered}" sec:authorize="hasAnyAuthority('ROLE_EMPLOYEE', 'ROLE_DELIVERY')">Deliver</a>
                 <a th:href="@{'/parcels/cancel/' + ${parcel.id}}" class="button is-danger is-light" th:disabled="${parcel.delivered}">Cancel</a>
               </div>
             </td>

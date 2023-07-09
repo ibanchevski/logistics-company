@@ -15,6 +15,8 @@ public interface ParcelService {
 
     List<ParcelEntity> getAllDeliveredInPeriod(LocalDate startDate, LocalDate endDate);
 
+    List<ParcelEntity> getAllByStatus(String status);
+
 
     long getCount();
 

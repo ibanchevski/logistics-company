@@ -34,6 +34,17 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
+    public List<ParcelEntity> getAllByStatus(String status) {
+        boolean delivered = status.equals("DELIVERED");
+
+        if (!delivered) {
+            return parcelRepository.findAllByDeliveredByIsNull();
+        }
+
+        return parcelRepository.findAllByDeliveredByNotNull();
+    }
+
+    @Override
     public List<ParcelEntity> getAllDeliveredInPeriod(LocalDate startDate, LocalDate endDate) {
         return parcelRepository.findByDeliveryDateBetween(startDate, endDate);
     }

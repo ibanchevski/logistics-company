@@ -32,7 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/employees/activate-details").permitAll()
                         .requestMatchers("/employees").hasAnyAuthority("ADMIN")
                         .requestMatchers("/offices").hasAnyAuthority("ADMIN", "EMPLOYEE", "DELIVERY")
-                        .requestMatchers("/employees").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/company").hasAnyAuthority("ADMIN")
+                        .requestMatchers("/parcels/new").hasAnyAuthority("ADMIN", "EMPLOYEE")
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLoginConfigurer -> formLoginConfigurer
